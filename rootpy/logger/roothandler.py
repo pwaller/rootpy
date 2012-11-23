@@ -17,6 +17,9 @@ class Initialized:
 
 ABORT_LEVEL = log.ERROR
 
+def cint_error_handler(msg):
+    root_logger.getLogger("CINT").error(msg)
+
 def python_logging_error_handler(level, abort, location, msg):
     """
     A python error handler for ROOT which maps ROOT's errors and warnings on

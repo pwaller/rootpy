@@ -9,6 +9,7 @@ ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 from . import log; log = log[__name__]
 from .logger import set_error_handler, python_logging_error_handler
+from .logger import set_error_handler_cint, cint_error_handler
 from .logger.magic import DANGER, fix_ipython_startup
 
 # See magic module for more details
@@ -24,6 +25,7 @@ if not log["/"].have_handlers():
 log["/ROOT.TUnixSystem.DispatchSignals"].showstack(min_level=log.ERROR)
 
 orig_error_handler = set_error_handler(python_logging_error_handler)
+set_error_handler_cint(cint_error_handler)
 
 DICTS_PATH = MODS_PATH = None
 
@@ -50,6 +52,7 @@ def configure_defaults():
     
     # Need to do it again here, since it is overridden by ROOT.
     set_error_handler(python_logging_error_handler)
+    set_error_handler_cint(cint_error_handler)
     
     ROOT.TH1.SetDefaultSumw2(True)
     

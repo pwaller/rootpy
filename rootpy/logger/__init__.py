@@ -100,10 +100,10 @@ if not os.environ.get("DEBUG", False):
 
 import rootpy.logger.color
 
-from .magic import set_error_handler
+from .magic import set_error_handler, set_error_handler_cint
 
 # Circular
-from .roothandler import python_logging_error_handler
+from .roothandler import python_logging_error_handler, cint_error_handler
 
 import threading
 class TraceDepth(threading.local):

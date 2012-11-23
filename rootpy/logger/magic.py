@@ -90,9 +90,29 @@ def get_seh():
         # ``eh`` can get garbage collected unless kept alive, leading to a segfault.
         _keep_alive.append(eh)
         return SetErrorHandler(eh)
-    return _SetErrorHandler
+        
+        
+    ErrorHandlerFuncCint_t = ctypes.CFUNCTYPE(None, ctypes.c_char_p)
+    this_dll = ctypes.CDLL(None)
+    try:
+        G__set_errmsgcallback = this_dll.G__set_errmsgcallback
+    except ValueError:
+        def _SetErrorHandlerCint(fn):
+            from rootpy import log
+            log.debug("SetCintErrorhandler not found")
+            # Do nothing
+            return
+    else:
+        def _SetErrorHandlerCint(fn):
+            from rootpy import log
+            log.debug("Setting Cint error handler")
+            eh = ErrorHandlerFuncCint_t(fn)
+            _keep_alive.append(eh)
+            G__set_errmsgcallback(eh)
+        
+    return _SetErrorHandler, _SetErrorHandlerCint
 
-set_error_handler = get_seh()
+set_error_handler, set_error_handler_cint = get_seh()
 
 def get_f_code_idx():
     """
