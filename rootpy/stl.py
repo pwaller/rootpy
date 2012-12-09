@@ -126,7 +126,7 @@ LD = root_config('--ld')
 
 NEW_DICTS = False
 LOOKUP_TABLE_NAME = 'lookup'
-USE_ACLIC = True
+USE_ACLIC = False #True
 
 # Initialized in initialize()
 LOADED_DICTS = {}
