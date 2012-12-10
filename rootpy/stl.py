@@ -126,7 +126,7 @@ LD = root_config('--ld')
 
 NEW_DICTS = False
 LOOKUP_TABLE_NAME = 'lookup'
-USE_ACLIC = False #True
+USE_ACLIC = True
 
 # Initialized in initialize()
 LOADED_DICTS = {}
@@ -144,6 +144,9 @@ def initialize():
     ROOT.gSystem.SetDynamicPath(path)
 
     ROOT.gSystem.AddLinkedLibs("-Wl,-rpath,{0}".format(DICTS_PATH))
+
+    if "DEBUG" in os.environ:
+        ROOT.gDebug = 7
 
 class CPPType(CPPGrammar):
     """
