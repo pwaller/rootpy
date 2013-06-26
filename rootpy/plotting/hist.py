@@ -1200,12 +1200,18 @@ if ROOT_VERSION >= (5, 28, 0):
             super(Efficiency, self).__init__(
                 len(total), total.xedgesl(0), total.xedgesh(-1),
                 name=name, title=title)
-
-            self.passed = passed.Clone()
-            self.total = total.Clone()
-            self.SetPassedHistogram(self.passed, 'f')
-            self.SetTotalHistogram(self.total, 'f')
+            
+            self.SetPassedHistogram(passed, 'f')
+            self.SetTotalHistogram(total, 'f')
             self._post_init(**kwargs)
+
+        @property
+        def passed(self):
+            return asrootpy(self.GetPassedHistogram())
+        
+        @property
+        def total(self):
+            return asrootpy(self.GetTotalHistogram())
 
         def __len__(self):
 
@@ -1246,6 +1252,9 @@ if ROOT_VERSION >= (5, 28, 0):
                 xerror = self.total.xwidth(bin) / 2.
                 graph.SetPointError(index, xerror, xerror, low, up)
             return graph
+
+        def GetXaxis(self):
+            return self.painted_graph.GetXaxis()
 
         @property
         def painted_graph(self):
