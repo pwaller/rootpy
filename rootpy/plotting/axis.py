@@ -21,6 +21,8 @@ class AxisScalingMixin(object):
         new_bins = array("d", (factor * bin for bin in bins))
         self.Set(self.GetNbins(), new_bins)
         self.invalidate()
+        
+        self._scaled = getattr(self, "_scaled", 1) * factor
     
     def __mul__(self, factor):
         """

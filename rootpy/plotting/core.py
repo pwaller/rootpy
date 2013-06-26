@@ -467,7 +467,33 @@ class Plottable(object):
     @xaxis.setter
     def xaxis(self, newaxis):
         
-        return newaxis.Copy(self.GetXaxis())
+        if hasattr(newaxis, "_scaled"):
+            # TODO(pwaller): Somehow verify that _scaled is the appropriate
+            # thing to apply here, i.e, that the axes are otherwise equivalent
+            # apart from a factor of _scaled. Not sure if a numeric comparison
+            # is the best way, or if we can somehow infer that `newaxis` is
+            # somehow related to self.GetXaxis()
+            
+            if isinstance(self, ROOT.TEfficiency):
+                # TODO(pwaller): unit test
+                rpself = asrootpy(self)
+                rpself.passed.xaxis *= newaxis._scaled
+                rpself.total.xaxis *= newaxis._scaled
+                rpself.painted_graph.xaxis *= newaxis._scaled
+                # `self`'s xaxis is totally modified by the above operation
+                # so return here.
+                return
+            
+            elif isinstance(self, ROOT.TGraph) and hasattr(newaxis, "_scaled"):
+                # TODO(pwaller): unit test
+                rpself = asrootpy(self)
+                # Stretch causes newaxis to get deleted, so we clone it.
+                _newaxis = newaxis.Clone()
+                rpself.Stretch(newaxis._scaled)
+                newaxis = _newaxis
+                newaxis.SetParent(rpself.GetHistogram())
+        
+        newaxis.Copy(self.GetXaxis())
 
     @property
     def yaxis(self):
