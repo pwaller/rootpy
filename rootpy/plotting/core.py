@@ -464,15 +464,30 @@ class Plottable(object):
 
         return asrootpy(self.GetXaxis())
 
+    @xaxis.setter
+    def xaxis(self, newaxis):
+        
+        return newaxis.Copy(self.GetXaxis())
+
     @property
     def yaxis(self):
 
         return asrootpy(self.GetYaxis())
+        
+    @yaxis.setter
+    def yaxis(self, newaxis):
+        
+        return newaxis.Copy(self.GetYaxis())
 
     @property
     def zaxis(self):
 
         return asrootpy(self.GetZaxis())
+        
+    @zaxis.setter
+    def zaxis(self, newaxis):
+        
+        return newaxis.Copy(self.GetZaxis())
 
     def Draw(self, *args):
 
